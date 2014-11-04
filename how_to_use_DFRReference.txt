@@ -1,0 +1,4 @@
+How to use the DFR Reference
+1. Open file DFRReference.7z with an archive manager and extract to any convenient directory.
+2. Locate file index.html in the resulting DFRReference directory, and open it with a browser.
+ 

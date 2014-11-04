@@ -1,0 +1,6 @@
+DFRMain          -- Digital Fist Recorder main sketch
+DFRReference.7z  -- program documentation for DFR, html, compressed
+doxygen          -- script and configuration for generating program documentation with doxygen
+file_list.txt    -- this file
+libraries        -- Arduino library code used by DFR
+license.txt      -- GNU GENERAL PUBLIC LICENSE, Version 2
