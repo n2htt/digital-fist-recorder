@@ -201,8 +201,10 @@ void flashErrorIndication(DigitalOutputPin &op) {
  * This function performs the initialization at reset
  */
 void setup() {
-   // initialize serial communication at 9600 bits per second:
-   Serial.begin(SERIAL_BAUD_RATE);
+   #ifdef ALLOW_SERIAL_IO
+      // initialize serial communication at 9600 bits per second:
+      Serial.begin(SERIAL_BAUD_RATE);
+   #endif
 
    // enable serial debug messages for DigitalPin
    DigitalPin::writePulsesToSerialEnabled = false;
@@ -222,11 +224,14 @@ void setup() {
       //Serial.println("SD initialized.");
    }
    else {
-      Serial.print("SD initialization ");
-      Serial.print(SD_RESERVED_PIN);
-      Serial.print(" ");
-      Serial.print(SD_CS_PIN);
-      Serial.println(" failed!");
+      #ifdef ALLOW_SERIAL_IO
+         Serial.print("SD initialization ");
+         Serial.print(SD_RESERVED_PIN);
+         Serial.print(" ");
+         Serial.print(SD_CS_PIN);
+         Serial.println(" failed!");
+      #endif
+      
       flashErrorIndication(ShortModePin);
    }
    
@@ -247,7 +252,7 @@ void setup() {
 /**
  * This function transitions to operation in the IDLE mode
  */
-static void transitToIdleMode() {
+void transitToIdleMode() {
    // prior mode does not affect transition to idle
    //Serial.println("IDLE");           
    loopWatchdog = 0;
@@ -278,7 +283,7 @@ static void transitToIdleMode() {
 /**
  * This function continues operation in the IDLE mode
  */
-static void continueIdleMode() {
+void continueIdleMode() {
    // check for channel selection request
    if (ChannelSelect.readInputPulseMode()) {
       // activity on channel select input
@@ -307,7 +312,7 @@ static void continueIdleMode() {
 /**
  * This function transitions to operation in the PLAYBACK mode
  */
-static void transitToPlaybackMode() {
+void transitToPlaybackMode() {
    // only commence recording 
    // if coming from some state other than record
    if (PIN_MODE_SHORT_PULSE != priorMode) {
@@ -334,7 +339,7 @@ static void transitToPlaybackMode() {
 /**
  * This function continues operation in the PLAYBACK mode
  */
-static void continuePlaybackMode() {
+void continuePlaybackMode() {
    // continuing playback mode 
    if (PulseTrain.playbackActive()) {
       if (PulseTrain.playBackKeying( KeyingOutput
@@ -355,7 +360,7 @@ static void continuePlaybackMode() {
 /**
  * This function transitions to operation in the RECORD mode
  */
-static void transitToRecordMode() {
+void transitToRecordMode() {
    // only commence recording 
    // if coming from some state other than record
    if (PIN_MODE_LONG_PULSE != priorMode) {
@@ -382,7 +387,7 @@ static void transitToRecordMode() {
 /**
  * This function continues operation in the RECORD mode
  */
-static void continueRecordMode() {
+void continueRecordMode() {
    // check keying input
    KeyingInput.determinePinState();
 
@@ -409,7 +414,7 @@ static void continueRecordMode() {
  * This function selects the correct transition to a new mode 
  * when the mode has changed in the current loop execution
  */
-static void selectModeTransition() {
+void selectModeTransition() {
    // what we do depends on what we were doing
    switch (priorMode) {
       // any mode change while we are busy
@@ -452,7 +457,7 @@ static void selectModeTransition() {
  * This function selects the correct action by mode 
  * when the mode has not changed in this loop execution
  */
-static void selectModeContinuation() {
+void selectModeContinuation() {
    switch (currentMode) {
       case PIN_MODE_SHORT_PULSE:
          continuePlaybackMode();
