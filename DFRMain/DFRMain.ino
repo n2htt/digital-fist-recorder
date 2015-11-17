@@ -12,7 +12,7 @@
 /**
  * @file    DFRMain.ino
  * @author  Mike Aiello N2HTT <n2htt@arrl.net>
- * @version 1.0
+ * @version 1.1
  *
  * Copyright (C) 2014 Michael Aiello N2HTT
  *
